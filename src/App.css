@@ -15,7 +15,7 @@ body {
 }
 
 .app {
-    width: 450px;
+    max-width: 450px;
     background: linear-gradient(90deg, #4b6cb7 0%, #182848 100%);
     border-radius: 20px;
 }
