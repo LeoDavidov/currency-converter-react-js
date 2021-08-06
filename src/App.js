@@ -29,18 +29,18 @@ class App extends React.Component {
     }
 
     calcResult() {
-        const result = (
+        const result =
             (this.state.moneyQuantity * this.state.rateFrom) /
-            this.state.rateTo
-        ).toFixed(2);
+            this.state.rateTo;
+
         if (
             isNaN(result) ||
             result === -Infinity ||
-            result === 'Infinity' ||
-            result != Math.abs(result)
+            result === Infinity ||
+            result !== Math.abs(result)
         )
             return '';
-        return result;
+        return result.toFixed(2);
     }
 
     render() {

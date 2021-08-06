@@ -5,14 +5,13 @@ class CurrencyDropdown extends React.Component {
     constructor(props) {
         super(props);
 
-        // for state.pairs
         const pairs = {};
         exchangeData.exchangeRates.forEach(
             ({ code, rate }) => (pairs[code] = rate)
         );
+        this.pairs = pairs;
 
-        // for state.sortedCurrencies
-        const sortedCurrencies = exchangeData.exchangeRates
+        this.sortedCurrencies = exchangeData.exchangeRates
             .map(({ code }) => code)
             .sort()
             .map((code) => {
@@ -22,15 +21,10 @@ class CurrencyDropdown extends React.Component {
                     </option>
                 );
             });
-
-        this.state = {
-            sortedCurrencies: sortedCurrencies,
-            pairs: pairs,
-        };
     }
 
     onSelectChange(currency) {
-        const rate = this.state.pairs[currency];
+        const rate = this.pairs[currency];
         this.props.onChange(rate);
     }
 
@@ -41,7 +35,7 @@ class CurrencyDropdown extends React.Component {
                 className="currency"
             >
                 <option>---</option>
-                {this.state.sortedCurrencies}
+                {this.sortedCurrencies}
             </select>
         );
     }
