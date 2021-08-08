@@ -26,7 +26,7 @@ export default function CurrencyDropdown({ onChange }) {
     return (
         <select
             className="currency"
-            onChange={(e) => onSelectChange(e.target.value)}
+            onChange={({ target }) => onSelectChange(target.value)}
         >
             <option>---</option>
             {sortedCurrencies}

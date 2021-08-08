@@ -1,22 +1,15 @@
 import React, { useState } from 'react';
 import './App.css';
 import CurrencyDropdown from './components/CurrencyDropdown';
+import SourceInput from './components/SourceInput';
 
 export default function App() {
-    const [moneyQuantity, setMoneyQuantity] = useState('');
+    const [sourceInput, setSourceInput] = useState('');
     const [rateFrom, setRateFrom] = useState(null);
     const [rateTo, setRateTo] = useState(null);
-    const [errorText, setErrorText] = useState('');
-
-    const onInputChange = (value) => {
-        if (isNaN(Number(value))) setErrorText('⛔ enter a number');
-        else if (value < 0) setErrorText('only positive numbers');
-        else setErrorText('');
-        setMoneyQuantity(value.slice(0, 6));
-    };
 
     const calcResult = () => {
-        const result = (moneyQuantity * rateFrom) / rateTo;
+        const result = (sourceInput * rateFrom) / rateTo;
         if (
             isNaN(result) ||
             result === -Infinity ||
@@ -34,12 +27,10 @@ export default function App() {
                 <div className="box-left">
                     <div className="text">from</div>
                     <CurrencyDropdown onChange={setRateFrom} />
-                    <input
-                        onChange={({ target }) => onInputChange(target.value)}
-                        value={moneyQuantity}
-                        type="text"
+                    <SourceInput
+                        onChange={setSourceInput}
+                        inputValue={sourceInput}
                     />
-                    <p className="error">{errorText}</p>
                 </div>
                 <div className="box-right">
                     <div className="text">to</div>
