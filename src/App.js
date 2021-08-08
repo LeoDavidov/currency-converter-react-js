@@ -1,38 +1,22 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './App.css';
 import CurrencyDropdown from './components/CurrencyDropdown';
 
-class App extends React.Component {
-    state = { moneyQuantity: '', rateFrom: null, rateTo: null, error: '' };
+export default function App() {
+    const [moneyQuantity, setMoneyQuantity] = useState('');
+    const [rateFrom, setRateFrom] = useState(null);
+    const [rateTo, setRateTo] = useState(null);
+    const [errorText, setErrorText] = useState('');
 
-    onCurrencyChangeFrom = (rate) => {
-        this.setState({ rateFrom: rate });
+    const onInputChange = (value) => {
+        if (isNaN(Number(value))) setErrorText('⛔ enter a number');
+        else if (value < 0) setErrorText('only positive numbers');
+        else setErrorText('');
+        setMoneyQuantity(value.slice(0, 6));
     };
 
-    onCurrencyChangeTo = (rate) => {
-        this.setState({ rateTo: rate });
-    };
-
-    onInputChange(value) {
-        if (isNaN(Number(value)))
-            this.setState({
-                error: '⛔ enter a number',
-            });
-        else if (value < 0)
-            this.setState({
-                error: 'only positive numbers',
-            });
-        else this.setState({ error: '' });
-        this.setState({
-            moneyQuantity: value.slice(0, 6),
-        });
-    }
-
-    calcResult() {
-        const result =
-            (this.state.moneyQuantity * this.state.rateFrom) /
-            this.state.rateTo;
-
+    const calcResult = () => {
+        const result = (moneyQuantity * rateFrom) / rateTo;
         if (
             isNaN(result) ||
             result === -Infinity ||
@@ -41,36 +25,28 @@ class App extends React.Component {
         )
             return '';
         return result.toFixed(2);
-    }
+    };
 
-    render() {
-        return (
-            <div className="app">
-                <h1>Currency Converter</h1>
-                <div className="input-box">
-                    <div className="box-left">
-                        <div className="text">from</div>
-                        <CurrencyDropdown
-                            onChange={this.onCurrencyChangeFrom}
-                        />
-                        <input
-                            onChange={({ target }) => {
-                                this.onInputChange(target.value);
-                            }}
-                            value={this.state.moneyQuantity}
-                            type="text"
-                        />
-                        <p className="error">{this.state.error}</p>
-                    </div>
-                    <div className="box-right">
-                        <div className="text">to</div>
-                        <CurrencyDropdown onChange={this.onCurrencyChangeTo} />
-                        <input value={this.calcResult()} type="text" disabled />
-                    </div>
+    return (
+        <div className="app">
+            <h1>Currency Converter</h1>
+            <div className="input-box">
+                <div className="box-left">
+                    <div className="text">from</div>
+                    <CurrencyDropdown onChange={setRateFrom} />
+                    <input
+                        onChange={({ target }) => onInputChange(target.value)}
+                        value={moneyQuantity}
+                        type="text"
+                    />
+                    <p className="error">{errorText}</p>
+                </div>
+                <div className="box-right">
+                    <div className="text">to</div>
+                    <CurrencyDropdown onChange={setRateTo} />
+                    <input value={calcResult()} type="text" disabled />
                 </div>
             </div>
-        );
-    }
+        </div>
+    );
 }
-
-export default App;

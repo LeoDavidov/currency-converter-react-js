@@ -1,44 +1,35 @@
 import React from 'react';
 import exchangeData from '../data/exchangeData.json';
 
-class CurrencyDropdown extends React.Component {
-    constructor(props) {
-        super(props);
+export default function CurrencyDropdown({ onChange }) {
+    const onSelectChange = (currency) => {
+        const rate = pairs[currency];
+        onChange(rate);
+    };
 
-        const pairs = {};
-        exchangeData.exchangeRates.forEach(
-            ({ code, rate }) => (pairs[code] = rate)
-        );
-        this.pairs = pairs;
+    const pairs = {};
+    exchangeData.exchangeRates.forEach(
+        ({ code, rate }) => (pairs[code] = rate)
+    );
 
-        this.sortedCurrencies = exchangeData.exchangeRates
-            .map(({ code }) => code)
-            .sort()
-            .map((code) => {
-                return (
-                    <option key={code} value={code}>
-                        {code}
-                    </option>
-                );
-            });
-    }
+    const sortedCurrencies = exchangeData.exchangeRates
+        .map(({ code }) => code)
+        .sort()
+        .map((code) => {
+            return (
+                <option key={code} value={code}>
+                    {code}
+                </option>
+            );
+        });
 
-    onSelectChange(currency) {
-        const rate = this.pairs[currency];
-        this.props.onChange(rate);
-    }
-
-    render() {
-        return (
-            <select
-                onChange={(e) => this.onSelectChange(e.target.value)}
-                className="currency"
-            >
-                <option>---</option>
-                {this.sortedCurrencies}
-            </select>
-        );
-    }
+    return (
+        <select
+            className="currency"
+            onChange={(e) => onSelectChange(e.target.value)}
+        >
+            <option>---</option>
+            {sortedCurrencies}
+        </select>
+    );
 }
-
-export default CurrencyDropdown;
