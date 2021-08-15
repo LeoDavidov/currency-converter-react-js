@@ -1,27 +1,34 @@
-import React from 'react';
-import exchangeData from '../data/exchangeData.json';
+import React, { useMemo } from 'react';
 
-export default function CurrencyDropdown({ onChange }) {
+export default function CurrencyDropdown({ data, onChange }) {
     const onSelectChange = (currency) => {
         const rate = pairs[currency];
         onChange(rate);
     };
 
-    const pairs = {};
-    exchangeData.exchangeRates.forEach(
-        ({ code, rate }) => (pairs[code] = rate)
-    );
+    const pairs = useMemo(() => {
+        const tempPairs = {};
+        data.exchangeRates.forEach(
+            ({ code, rate }) => (tempPairs[code] = rate)
+        );
+        console.log(tempPairs);
+        return tempPairs;
+    }, [data]);
 
-    const sortedCurrencies = exchangeData.exchangeRates
-        .map(({ code }) => code)
-        .sort()
-        .map((code) => {
-            return (
-                <option key={code} value={code}>
-                    {code}
-                </option>
-            );
-        });
+    const sortedCurrencies = useMemo(
+        () =>
+            data.exchangeRates
+                .map(({ code }) => code)
+                .sort()
+                .map((code) => {
+                    return (
+                        <option key={code} value={code}>
+                            {code}
+                        </option>
+                    );
+                }),
+        [data]
+    );
 
     return (
         <select
